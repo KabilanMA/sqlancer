@@ -15,11 +15,6 @@ import sqlancer.common.oracle.TestOracle;
 import sqlancer.stonedb.StoneDBOptions.StoneDBOracleFactory;
 import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
 import sqlancer.stonedb.test.StoneDBNoRECOracle;
-import sqlancer.stonedb.test.StoneDBQueryPartitioningAggregateTester;
-import sqlancer.stonedb.test.StoneDBQueryPartitioningDistinctTester;
-import sqlancer.stonedb.test.StoneDBQueryPartitioningGroupByTester;
-import sqlancer.stonedb.test.StoneDBQueryPartitioningHavingTester;
-import sqlancer.stonedb.test.StoneDBQueryPartitioningWhereTester;
 
 @Parameters(commandDescription = "DuckDB")
 public class StoneDBOptions implements DBMSSpecificOptions<StoneDBOracleFactory> {
@@ -90,8 +85,6 @@ public class StoneDBOptions implements DBMSSpecificOptions<StoneDBOracleFactory>
     @Parameter(names = "--max-num-updates", description = "The maximum number of UPDATE statements that are issued for a database", arity = 1)
     public int maxNumUpdates = 5;
 
-    @Parameter(names = "--oracle")
-    public List<StoneDBOracleFactory> oracles = Arrays.asList(StoneDBOracleFactory.QUERY_PARTITIONING);
 
     public enum StoneDBOracleFactory implements OracleFactory<StoneDBGlobalState> {
         NOREC {
@@ -102,56 +95,14 @@ public class StoneDBOptions implements DBMSSpecificOptions<StoneDBOracleFactory>
             }
 
         },
-        HAVING {
-            @Override
-            public TestOracle<StoneDBGlobalState> create(StoneDBGlobalState globalState) throws SQLException {
-                return new StoneDBQueryPartitioningHavingTester(globalState);
-            }
-        },
-        WHERE {
-            @Override
-            public TestOracle<StoneDBGlobalState> create(StoneDBGlobalState globalState) throws SQLException {
-                return new StoneDBQueryPartitioningWhereTester(globalState);
-            }
-        },
-        GROUP_BY {
-            @Override
-            public TestOracle<StoneDBGlobalState> create(StoneDBGlobalState globalState) throws SQLException {
-                return new StoneDBQueryPartitioningGroupByTester(globalState);
-            }
-        },
-        AGGREGATE {
-
-            @Override
-            public TestOracle<StoneDBGlobalState> create(StoneDBGlobalState globalState) throws SQLException {
-                return new StoneDBQueryPartitioningAggregateTester(globalState);
-            }
-
-        },
-        DISTINCT {
-            @Override
-            public TestOracle<StoneDBGlobalState> create(StoneDBGlobalState globalState) throws SQLException {
-                return new StoneDBQueryPartitioningDistinctTester(globalState);
-            }
-        },
-        QUERY_PARTITIONING {
-            @Override
-            public TestOracle<StoneDBGlobalState> create(StoneDBGlobalState globalState) throws SQLException {
-                List<TestOracle<StoneDBGlobalState>> oracles = new ArrayList<>();
-                oracles.add(new StoneDBQueryPartitioningWhereTester(globalState));
-                oracles.add(new StoneDBQueryPartitioningHavingTester(globalState));
-                oracles.add(new StoneDBQueryPartitioningAggregateTester(globalState));
-                oracles.add(new StoneDBQueryPartitioningDistinctTester(globalState));
-                oracles.add(new StoneDBQueryPartitioningGroupByTester(globalState));
-                return new CompositeTestOracle<StoneDBGlobalState>(oracles, globalState);
-            }
-        };
 
     }
 
-    @Override
-    public List<StoneDBOracleFactory> getTestOracleFactory() {
-        return oracles;
-    }
+
+	@Override
+	public List<StoneDBOracleFactory> getTestOracleFactory() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -7,46 +7,46 @@ import sqlancer.Randomly;
 import sqlancer.common.gen.AbstractInsertGenerator;
 import sqlancer.common.query.ExpectedErrors;
 import sqlancer.common.query.SQLQueryAdapter;
-import sqlancer.duckdb.DuckDBErrors;
-import sqlancer.duckdb.DuckDBProvider.DuckDBGlobalState;
-import sqlancer.duckdb.DuckDBSchema.DuckDBColumn;
-import sqlancer.duckdb.DuckDBSchema.DuckDBTable;
-import sqlancer.duckdb.DuckDBToStringVisitor;
+import sqlancer.stonedb.StoneDBErrors;
+import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
+import sqlancer.stonedb.StoneDBSchema.StoneDBColumn;
+import sqlancer.stonedb.StoneDBSchema.StoneDBTable;
+import sqlancer.stonedb.StoneDBToStringVisitor;
 
-public class StoneDBInsertGenerator extends AbstractInsertGenerator<DuckDBColumn> {
+public class StoneDBInsertGenerator extends AbstractInsertGenerator<StoneDBColumn> {
 
-    private final DuckDBGlobalState globalState;
+    private final StoneDBGlobalState globalState;
     private final ExpectedErrors errors = new ExpectedErrors();
 
-    public StoneDBInsertGenerator(DuckDBGlobalState globalState) {
+    public StoneDBInsertGenerator(StoneDBGlobalState globalState) {
         this.globalState = globalState;
     }
 
-    public static SQLQueryAdapter getQuery(DuckDBGlobalState globalState) {
+    public static SQLQueryAdapter getQuery(StoneDBGlobalState globalState) {
         return new StoneDBInsertGenerator(globalState).generate();
     }
 
     private SQLQueryAdapter generate() {
         sb.append("INSERT INTO ");
-        DuckDBTable table = globalState.getSchema().getRandomTable(t -> !t.isView());
-        List<DuckDBColumn> columns = table.getRandomNonEmptyColumnSubset();
+        StoneDBTable table = globalState.getSchema().getRandomTable(t -> !t.isView());
+        List<StoneDBColumn> columns = table.getRandomNonEmptyColumnSubset();
         sb.append(table.getName());
         sb.append("(");
         sb.append(columns.stream().map(c -> c.getName()).collect(Collectors.joining(", ")));
         sb.append(")");
         sb.append(" VALUES ");
         insertColumns(columns);
-        DuckDBErrors.addInsertErrors(errors);
+        StoneDBErrors.addInsertErrors(errors);
         return new SQLQueryAdapter(sb.toString(), errors);
     }
 
     @Override
-    protected void insertValue(DuckDBColumn tiDBColumn) {
+    protected void insertValue(StoneDBColumn tiDBColumn) {
         // TODO: select a more meaningful value
         if (Randomly.getBooleanWithRatherLowProbability()) {
             sb.append("DEFAULT");
         } else {
-            sb.append(DuckDBToStringVisitor.asString(new StoneDBExpressionGenerator(globalState).generateConstant()));
+            sb.append(StoneDBToStringVisitor.asString(new StoneDBExpressionGenerator(globalState).generateConstant()));
         }
     }
 
