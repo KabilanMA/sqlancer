@@ -10,7 +10,7 @@ import sqlancer.common.gen.UntypedExpressionGenerator;
 import sqlancer.common.query.ExpectedErrors;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.stonedb.StoneDBErrors;
-import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
+import sqlancer.stonedb.StoneDBGlobalState;
 import sqlancer.stonedb.StoneDBSchema.StoneDBColumn;
 import sqlancer.stonedb.StoneDBSchema.StoneDBCompositeDataType;
 import sqlancer.stonedb.StoneDBSchema.StoneDBDataType;

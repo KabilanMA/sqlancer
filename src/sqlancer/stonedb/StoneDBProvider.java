@@ -20,7 +20,8 @@ import sqlancer.StatementExecutor;
 import sqlancer.common.query.ExpectedErrors;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.common.query.SQLQueryProvider;
-import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
+import sqlancer.stonedb.StoneDBGlobalState;
+import sqlancer.stonedb.StoneDBOptions;
 import sqlancer.stonedb.gen.StoneDBDeleteGenerator;
 import sqlancer.stonedb.gen.StoneDBIndexGenerator;
 import sqlancer.stonedb.gen.StoneDBInsertGenerator;
@@ -92,15 +93,6 @@ public class StoneDBProvider extends SQLProviderAdapter<StoneDBGlobalState, Ston
         }
     }
 
-    public static class StoneDBGlobalState extends SQLGlobalState<StoneDBOptions, StoneDBSchema> {
-
-        @Override
-        protected StoneDBSchema readSchema() throws SQLException {
-            return StoneDBSchema.fromConnection(getConnection(), getDatabaseName());
-        }
-
-    }
-
     @Override
     public void generateDatabase(StoneDBGlobalState globalState) throws Exception {
         for (int i = 0; i < Randomly.fromOptions(1, 2); i++) {
@@ -140,20 +132,36 @@ public class StoneDBProvider extends SQLProviderAdapter<StoneDBGlobalState, Ston
 
     @Override
     public SQLConnection createDatabase(StoneDBGlobalState globalState) throws SQLException {
-        String databaseFile = System.getProperty("duckdb.database.file", "");
-        String url = "jdbc:duckdb:" + databaseFile;
-        tryDeleteDatabase(databaseFile);
-
-        MainOptions options = globalState.getOptions();
-        if (!(options.isDefaultUsername() && options.isDefaultPassword())) {
-            throw new AssertionError("DuckDB doesn't support credentials (username/password)");
+//    	String username = "root";
+    	String username = globalState.getOptions().getUserName();
+//    	String password = "";
+    	String password = globalState.getOptions().getPassword();
+//    	String host = "localhost";
+    	String host = globalState.getOptions().getHost();
+    	if (host == null) {
+    		host = StoneDBOptions.DEFAULT_HOST;
+    	}
+//    	int port = 3306;
+    	int port = globalState.getOptions().getPort();
+    	if (port == MainOptions.NO_SET_PORT) {
+    		port = StoneDBOptions.DEFAULT_PORT;
+    	}
+//    	String databaseName = "test";
+    	String databaseName = globalState.getDatabaseName();
+//    	String mysqlSocketLocation = "/stonedb56/install/tmp/mysql.sock";
+    	String mysqlSocketLocation = globalState.getSocketLocation();
+    	String url = "jdbs:mysql;//"+host+":"+port+"/"+databaseName+"?unixSocket="+mysqlSocketLocation;
+    	Connection conn = DriverManager.getConnection(url, username, password);
+    	try (Statement s = conn.createStatement()) {
+            s.execute("DROP DATABASE IF EXISTS " + databaseName);
         }
-
-        Connection conn = DriverManager.getConnection(url);
-        Statement stmt = conn.createStatement();
-        stmt.execute("PRAGMA checkpoint_threshold='1 byte';");
-        stmt.close();
-        return new SQLConnection(conn);
+        try (Statement s = conn.createStatement()) {
+            s.execute("CREATE DATABASE " + databaseName);
+        }
+        try (Statement s = conn.createStatement()) {
+            s.execute("USE " + databaseName);
+        }
+    	return new SQLConnection(conn);
     }
 
     @Override

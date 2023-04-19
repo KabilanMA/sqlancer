@@ -12,11 +12,14 @@ import sqlancer.DBMSSpecificOptions;
 import sqlancer.OracleFactory;
 import sqlancer.common.oracle.CompositeTestOracle;
 import sqlancer.common.oracle.TestOracle;
+import sqlancer.mysql.MySQLOptions;
+import sqlancer.mysql.MySQLOptions.MySQLOracleFactory;
 import sqlancer.stonedb.StoneDBOptions.StoneDBOracleFactory;
 import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
 import sqlancer.stonedb.test.StoneDBNoRECOracle;
 
-@Parameters(commandDescription = "DuckDB")
+@Parameters(separators = "=", commandDescription = "StoneDB (default port: " + StoneDBOptions.DEFAULT_PORT
++ ", default host: " + StoneDBOptions.DEFAULT_HOST + ")")
 public class StoneDBOptions implements DBMSSpecificOptions<StoneDBOracleFactory> {
 
     @Parameter(names = "--test-collate", arity = 1)
@@ -84,8 +87,13 @@ public class StoneDBOptions implements DBMSSpecificOptions<StoneDBOracleFactory>
 
     @Parameter(names = "--max-num-updates", description = "The maximum number of UPDATE statements that are issued for a database", arity = 1)
     public int maxNumUpdates = 5;
+    
+    @Parameter(names = "--oracle")
+    public List<StoneDBOracleFactory> oracles = Arrays.asList(StoneDBOracleFactory.NOREC);
 
-
+    public static final String DEFAULT_HOST = "localhost";
+    public static final int DEFAULT_PORT = 3306;
+    
     public enum StoneDBOracleFactory implements OracleFactory<StoneDBGlobalState> {
         NOREC {
 
@@ -101,8 +109,7 @@ public class StoneDBOptions implements DBMSSpecificOptions<StoneDBOracleFactory>
 
 	@Override
 	public List<StoneDBOracleFactory> getTestOracleFactory() {
-		// TODO Auto-generated method stub
-		return null;
+		return oracles;
 	}
 
 }

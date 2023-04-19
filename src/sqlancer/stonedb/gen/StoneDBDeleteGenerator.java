@@ -4,7 +4,7 @@ import sqlancer.Randomly;
 import sqlancer.common.query.ExpectedErrors;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.stonedb.StoneDBErrors;
-import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
+import sqlancer.stonedb.StoneDBGlobalState;
 import sqlancer.stonedb.StoneDBSchema.StoneDBTable;
 import sqlancer.stonedb.StoneDBToStringVisitor;
 

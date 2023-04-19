@@ -20,7 +20,7 @@ import sqlancer.common.ast.newast.NewUnaryPostfixOperatorNode;
 import sqlancer.common.ast.newast.NewUnaryPrefixOperatorNode;
 import sqlancer.common.ast.newast.Node;
 import sqlancer.common.gen.UntypedExpressionGenerator;
-import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
+import sqlancer.stonedb.StoneDBGlobalState;
 import sqlancer.stonedb.StoneDBSchema.StoneDBColumn;
 import sqlancer.stonedb.StoneDBSchema.StoneDBCompositeDataType;
 import sqlancer.stonedb.StoneDBSchema.StoneDBDataType;

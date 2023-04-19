@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import sqlancer.Randomly;
 import sqlancer.common.ast.newast.Node;
 import sqlancer.common.ast.newast.TableReferenceNode;
-import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
+import sqlancer.stonedb.StoneDBGlobalState;
 import sqlancer.stonedb.StoneDBSchema.StoneDBTable;
 import sqlancer.stonedb.StoneDBSchema.StoneDBTables;
 import sqlancer.stonedb.ast.StoneDBConstant;

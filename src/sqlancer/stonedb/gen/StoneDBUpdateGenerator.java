@@ -7,7 +7,7 @@ import sqlancer.common.ast.newast.Node;
 import sqlancer.common.gen.AbstractUpdateGenerator;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.stonedb.StoneDBErrors;
-import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
+import sqlancer.stonedb.StoneDBGlobalState;
 import sqlancer.stonedb.StoneDBSchema.StoneDBColumn;
 import sqlancer.stonedb.StoneDBSchema.StoneDBTable;
 import sqlancer.stonedb.StoneDBToStringVisitor;
