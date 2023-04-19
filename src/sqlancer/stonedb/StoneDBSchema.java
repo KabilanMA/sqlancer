@@ -16,7 +16,7 @@ import sqlancer.common.schema.AbstractSchema;
 import sqlancer.common.schema.AbstractTableColumn;
 import sqlancer.common.schema.AbstractTables;
 import sqlancer.common.schema.TableIndex;
-import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
+import sqlancer.stonedb.StoneDBGlobalState;
 import sqlancer.stonedb.StoneDBSchema.StoneDBTable;
 
 public class StoneDBSchema extends AbstractSchema<StoneDBGlobalState, StoneDBTable> {

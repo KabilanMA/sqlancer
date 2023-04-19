@@ -19,7 +19,7 @@ import sqlancer.common.oracle.TestOracle;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.common.query.SQLancerResultSet;
 import sqlancer.stonedb.StoneDBErrors;
-import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
+import sqlancer.stonedb.StoneDBGlobalState;
 import sqlancer.stonedb.StoneDBSchema;
 import sqlancer.stonedb.StoneDBSchema.StoneDBColumn;
 import sqlancer.stonedb.StoneDBSchema.StoneDBCompositeDataType;

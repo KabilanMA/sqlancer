@@ -15,7 +15,7 @@ import sqlancer.common.oracle.TestOracle;
 import sqlancer.mysql.MySQLOptions;
 import sqlancer.mysql.MySQLOptions.MySQLOracleFactory;
 import sqlancer.stonedb.StoneDBOptions.StoneDBOracleFactory;
-import sqlancer.stonedb.StoneDBProvider.StoneDBGlobalState;
+import sqlancer.stonedb.StoneDBGlobalState;
 import sqlancer.stonedb.test.StoneDBNoRECOracle;
 
 @Parameters(separators = "=", commandDescription = "StoneDB (default port: " + StoneDBOptions.DEFAULT_PORT
