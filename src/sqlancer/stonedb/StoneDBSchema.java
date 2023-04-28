@@ -16,6 +16,8 @@ import sqlancer.common.schema.AbstractSchema;
 import sqlancer.common.schema.AbstractTableColumn;
 import sqlancer.common.schema.AbstractTables;
 import sqlancer.common.schema.TableIndex;
+import sqlancer.mysql.MySQLGlobalState;
+import sqlancer.mysql.MySQLSchema.MySQLDataType;
 import sqlancer.stonedb.StoneDBGlobalState;
 import sqlancer.stonedb.StoneDBSchema.StoneDBTable;
 
@@ -23,7 +25,7 @@ public class StoneDBSchema extends AbstractSchema<StoneDBGlobalState, StoneDBTab
 
     public enum StoneDBDataType {
 
-        INT, VARCHAR, BOOLEAN, FLOAT, DATE, TIMESTAMP, NULL;
+        INT, VARCHAR, BOOLEAN, DOUBLE, FLOAT, DECIMAL, NULL;
 
         public static StoneDBDataType getRandomWithoutNull() {
             StoneDBDataType dt;
@@ -31,6 +33,22 @@ public class StoneDBSchema extends AbstractSchema<StoneDBGlobalState, StoneDBTab
                 dt = Randomly.fromOptions(values());
             } while (dt == StoneDBDataType.NULL);
             return dt;
+        }
+
+        public boolean isNumeric() {
+            switch (this) {
+            case INT:
+            case DOUBLE:
+            case DECIMAL:
+            case FLOAT:
+                return true;
+            case VARCHAR:
+            case BOOLEAN:
+            case NULL:
+                return false;
+            default:
+                throw new AssertionError(this);
+            }
         }
 
     }
@@ -69,8 +87,6 @@ public class StoneDBSchema extends AbstractSchema<StoneDBGlobalState, StoneDBTab
                 break;
             case BOOLEAN:
             case VARCHAR:
-            case DATE:
-            case TIMESTAMP:
                 size = 0;
                 break;
             default:
@@ -109,10 +125,6 @@ public class StoneDBSchema extends AbstractSchema<StoneDBGlobalState, StoneDBTab
                 }
             case BOOLEAN:
                 return Randomly.fromOptions("BOOLEAN", "BOOL");
-            case TIMESTAMP:
-                return Randomly.fromOptions("TIMESTAMP", "DATETIME");
-            case DATE:
-                return Randomly.fromOptions("DATE");
             case NULL:
                 return Randomly.fromOptions("NULL");
             default:
@@ -196,12 +208,6 @@ public class StoneDBSchema extends AbstractSchema<StoneDBGlobalState, StoneDBTab
             break;
         case "BOOLEAN":
             primitiveType = StoneDBDataType.BOOLEAN;
-            break;
-        case "DATE":
-            primitiveType = StoneDBDataType.DATE;
-            break;
-        case "TIMESTAMP":
-            primitiveType = StoneDBDataType.TIMESTAMP;
             break;
         case "NULL":
             primitiveType = StoneDBDataType.NULL;

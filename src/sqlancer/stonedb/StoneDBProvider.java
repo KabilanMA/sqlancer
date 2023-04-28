@@ -17,9 +17,14 @@ import sqlancer.SQLConnection;
 import sqlancer.SQLGlobalState;
 import sqlancer.SQLProviderAdapter;
 import sqlancer.StatementExecutor;
+import sqlancer.common.DBMSCommon;
 import sqlancer.common.query.ExpectedErrors;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.common.query.SQLQueryProvider;
+import sqlancer.mysql.MySQLGlobalState;
+import sqlancer.mysql.MySQLProvider;
+import sqlancer.mysql.MySQLProvider.Action;
+import sqlancer.mysql.gen.MySQLTableGenerator;
 import sqlancer.stonedb.StoneDBGlobalState;
 import sqlancer.stonedb.StoneDBOptions;
 import sqlancer.stonedb.gen.StoneDBDeleteGenerator;
@@ -98,7 +103,8 @@ public class StoneDBProvider extends SQLProviderAdapter<StoneDBGlobalState, Ston
         for (int i = 0; i < Randomly.fromOptions(1, 2); i++) {
             boolean success;
             do {
-                SQLQueryAdapter qt = new StoneDBTableGenerator().getQuery(globalState);
+            	String tableName = DBMSCommon.createTableName(globalState.getSchema().getDatabaseTables().size());
+                SQLQueryAdapter qt = new StoneDBTableGenerator(globalState, tableName).generate(globalState);
                 success = globalState.executeStatement(qt);
             } while (!success);
         }

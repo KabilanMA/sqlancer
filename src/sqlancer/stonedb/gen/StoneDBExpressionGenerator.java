@@ -140,16 +140,6 @@ public final class StoneDBExpressionGenerator extends UntypedExpressionGenerator
                 throw new IgnoreMeException();
             }
             return StoneDBConstant.createIntConstant(globalState.getRandomly().getInteger());
-        case DATE:
-            if (!globalState.getDbmsSpecificOptions().testDateConstants) {
-                throw new IgnoreMeException();
-            }
-            return StoneDBConstant.createDateConstant(globalState.getRandomly().getInteger());
-        case TIMESTAMP:
-            if (!globalState.getDbmsSpecificOptions().testTimestampConstants) {
-                throw new IgnoreMeException();
-            }
-            return StoneDBConstant.createTimestampConstant(globalState.getRandomly().getInteger());
         case VARCHAR:
             if (!globalState.getDbmsSpecificOptions().testStringConstants) {
                 throw new IgnoreMeException();
